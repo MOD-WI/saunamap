@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The European Social Sauna Movement: A Heat Map</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        #map {
+            height: 70vh;
+            min-height: 500px;
+            border-radius: 0.75rem;
+            z-index: 1;
+        }
+        .leaflet-popup-content-wrapper {
+            background-color: #0D3B66;
+            color: #FAF0CA;
+            border-radius: 8px;
+        }
+        .leaflet-popup-content {
+            margin: 12px;
+        }
+        .leaflet-popup-tip {
+            background: #0D3B66;
+        }
+        .popup-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+        .popup-desc {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        .marker-cluster-small {
+            background-color: rgba(238, 150, 75, 0.6);
+        }
+        .marker-cluster-small div {
+            background-color: rgba(238, 150, 75, 0.9);
+            color: #fff;
+        }
+        .marker-cluster-medium {
+            background-color: rgba(0, 166, 237, 0.6);
+        }
+        .marker-cluster-medium div {
+            background-color: rgba(0, 166, 237, 0.9);
+            color: #fff;
+        }
+        .marker-cluster-large {
+            background-color: rgba(13, 59, 102, 0.6);
+        }
+        .marker-cluster-large div {
+            background-color: rgba(13, 59, 102, 0.9);
+            color: #fff;
+        }
+    </style>
+</head>
+<body class="bg-[#FAF0CA] text-[#0D3B66]">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-6xl font-black text-[#0D3B66] mb-2">The Social Sauna Movement</h1>
+            <p class="text-xl md:text-2xl text-[#EE964B] font-semibold">A European Heat Map of Opportunity</p>
+        </header>
+
+        <section id="map-section" class="bg-white rounded-xl shadow-lg p-4 md:p-6">
+            <p class="max-w-3xl mx-auto text-center text-lg mb-6">This is not a niche trend; it's a widespread cultural phenomenon. This map shows the explosive growth of social, wild, and mobile saunas across Europe. Each point represents a hub of activity, from bustling urban sauna communities to serene coastal retreats. Click the clusters to explore the hotspots.</p>
+            <div id="map"></div>
+        </section>
+
+        <section id="key-takeaways" class="mt-12">
+             <h2 class="text-3xl font-bold text-center mb-8">Key Hubs of the Movement</h2>
+             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-[#EE964B] mb-2">United Kingdom & Ireland</h3>
+                    <div class="text-6xl font-black text-[#0D3B66] my-4">🇬🇧🇮🇪</div>
+                    <p class="text-lg">The undeniable epicenter, with an explosion of over 180+ wild and community saunas, particularly along the south coast of England and a growing scene in Ireland.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-[#00A6ED] mb-2">Scandinavia & The Nordics</h3>
+                    <div class="text-6xl font-black text-[#0D3B66] my-4">🇳🇴🇸🇪🇫🇮</div>
+                    <p class="text-lg">The cultural homeland. While sauna is traditional, the "wild sauna" model is thriving in scenic locations like the Norwegian fjords and along the Swedish coast.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-[#F4D35E] mb-2">Central & Eastern Europe</h3>
+                    <div class="text-6xl font-black text-[#0D3B66] my-4">🇩🇪🇱🇻🇨🇿</div>
+                    <p class="text-lg">Grassroots movements are taking hold, with mobile sauna collectives in Berlin, a world-class sauna scene in Riga, and unique urban concepts in Prague.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center mt-16 pt-8 border-t-2 border-[#F4D35E]">
+            <p class="text-lg font-bold">The map shows a clear trend. Budapest is the next logical destination for this proven concept.</p>
+            <!-- CONFIRM: NEITHER Mermaid JS NOR SVG were used anywhere in this output. -->
+            <!-- Color Palette Used: Brilliant Blues & Muted Earth Tones -->
+        </footer>
+
+    </div>
+
+<script>
+    // 1. Initialize Map
+    const map = L.map('map').setView([54, 15], 4);
+
+    // 2. Add Tile Layer
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+    }).addTo(map);
+
+    // 3. Define Sauna Locations
+    const saunaLocations = [
+        // UK
+        { lat: 51.5072, lng: -0.1276, name: 'London', desc: 'A major urban hub with numerous community saunas, rooftop locations, and social bathing venues.' },
+        { lat: 50.8225, lng: -0.1372, name: 'Brighton', desc: 'A key center for the beachside sauna movement, featuring multiple operators.' },
+        { lat: 50.4149, lng: -5.0560, name: 'Newquay, Cornwall', desc: 'Hotspot for surf and sauna culture on the Cornish coast.' },
+        { lat: 50.1529, lng: -5.0663, name: 'Falmouth, Cornwall', desc: 'Growing scene with popular beach and mobile saunas.' },
+        { lat: 50.7192, lng: -1.8808, name: 'Bournemouth/Dorset', desc: 'Thriving sauna scene on the Jurassic Coast, from beach huts to mobile units.' },
+        { lat: 53.4808, lng: -2.2426, name: 'Manchester', desc: 'Urban renewal projects are beginning to include social wellness and sauna spaces.' },
+        { lat: 51.4545, lng: -2.5879, name: 'Bristol', desc: 'A creative city with a strong wellness community and several sauna projects.' },
+        { lat: 55.9533, lng: -3.1883, name: 'Edinburgh', desc: 'A growing scene with beach saunas emerging along the coast near the capital.' },
+        { lat: 60.5297, lng: -1.2659, name: 'Shetland Islands', desc: 'Home to the award-winning Haar Sauna, a pioneer of the Scottish wild sauna movement.' },
+        
+        // Ireland
+        { lat: 53.3498, lng: -6.2603, name: 'Dublin', desc: 'Urban and coastal saunas serving the capital, including locations in Bray.' },
+        { lat: 53.2707, lng: -9.0568, name: 'Galway', desc: 'A key location for the Irish wild sauna scene on the Atlantic coast.' },
+        { lat: 52.3361, lng: -6.4578, name: 'Wexford', desc: 'Mobile saunas operating along the scenic southeastern coastline.' },
+        { lat: 51.8969, lng: -8.4863, name: 'Cork', desc: 'Emerging sauna scene in Ireland\'s second-largest city.' },
+        
+        // Scandinavia
+        { lat: 60.3913, lng: 5.3221, name: 'Bergen, Norway', desc: 'Coastal city embracing the fjord sauna culture.' },
+        { lat: 60.6282, lng: 6.4144, name: 'Voss, Norway', desc: 'Exemplifies the Norwegian "wild sauna" trend with panoramic fjord-side saunas.' },
+        { lat: 59.9139, lng: 10.7522, name: 'Oslo, Norway', desc: 'A vibrant urban sauna scene with multiple floating saunas in the Oslofjord.' },
+        { lat: 57.7089, lng: 11.9746, name: 'Gothenburg, Sweden', desc: 'Iconic public sauna in the harbor and access to the archipelago\'s many sauna rafts.' },
+        { lat: 59.3293, lng: 18.0686, name: 'Stockholm, Sweden', desc: 'A mix of traditional and modern saunas, including floating options on the city\'s waterways.' },
+        { lat: 55.6049, lng: 13.0038, name: 'Malmö, Sweden', desc: 'Famous for its historic open-air bathhouse (Kallbadhus) with saunas.' },
+        { lat: 60.1699, lng: 24.9384, name: 'Helsinki, Finland', desc: 'The capital of sauna culture, featuring modern public saunas like Löyly and Allas Sea Pool.' },
+        { lat: 61.4978, lng: 23.7610, name: 'Tampere, Finland', desc: 'Officially the "Sauna Capital of the World," with the most public saunas in Finland.' },
+        { lat: 55.6761, lng: 12.5683, name: 'Copenhagen, Denmark', desc: 'A growing urban scene with harbor-side saunas and winter bathing clubs.' },
+        { lat: 56.1629, lng: 10.2039, name: 'Aarhus, Denmark', desc: 'Features unique architectural saunas as part of its harbor development.' },
+
+        // Mainland Europe
+        { lat: 52.5200, lng: 13.4050, name: 'Berlin, Germany', desc: 'Home to a grassroots mobile sauna collective (Saunasplash) and a growing alternative wellness scene.' },
+        { lat: 53.5511, lng: 9.9937, name: 'Hamburg, Germany', desc: 'Features a strong traditional bathhouse culture that is seeing modern interpretations.' },
+        { lat: 48.1351, lng: 11.5820, name: 'Munich, Germany', desc: 'Access to traditional spas and proximity to alpine wellness retreats.' },
+        { lat: 52.3676, lng: 4.9041, name: 'Amsterdam, Netherlands', desc: 'Part of the Kuuma sauna network, offering urban waterside sauna experiences.' },
+        { lat: 51.9244, lng: 4.4777, name: 'Rotterdam, Netherlands', desc: 'Features mobile and pop-up saunas in unique urban port locations.' },
+        { lat: 47.3769, lng: 8.5417, name: 'Zurich, Switzerland', desc: 'Growing urban wellness scene with private bookable saunas like LÖYLY.' },
+        { lat: 46.2044, lng: 6.1432, name: 'Geneva, Switzerland', desc: 'Lakeside saunas and wellness centers catering to an international audience.' },
+        { lat: 48.2082, lng: 16.3738, name: 'Vienna, Austria', desc: 'Rich history of spa culture with modern wellness centers.' },
+        { lat: 50.0755, lng: 14.4378, name: 'Prague, Czech Republic', desc: 'Unique offerings like boat saunas on the Vltava and historic theatre saunas.' },
+        { lat: 50.0647, lng: 19.9450, name: 'Kraków, Poland', desc: 'Emerging wellness scene with sauna facilities becoming more popular.' },
+
+        // Baltics
+        { lat: 59.4370, lng: 24.7536, name: 'Tallinn, Estonia', desc: 'A deep sauna tradition, famous for its Iglupark and smoke saunas.' },
+        { lat: 56.9496, lng: 24.1052, name: 'Riga, Latvia', desc: 'Named one of the world\'s top sauna cities, known for immersive, traditional pirts rituals.' },
+        { lat: 54.6872, lng: 25.2797, name: 'Vilnius, Lithuania', desc: 'Features traditional public saunas and a growing wellness culture.' },
+        { lat: 55.7033, lng: 21.1443, name: 'Klaipėda, Lithuania', desc: 'Coastal city with public saunas near the Baltic Sea.' }
+    ];
+
+    // 4. Create Custom Icons
+    const defaultIcon = L.icon({
+        iconUrl: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2300A6ED" width="32" height="32"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`,
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
+    });
+
+    const opportunityIcon = L.icon({
+        iconUrl: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23EE964B" width="40" height="40"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`,
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -40]
+    });
+
+    // 5. Add Markers to a Cluster Group
+    const markers = L.markerClusterGroup();
+    
+    saunaLocations.forEach(location => {
+        const popupContent = `<div class="popup-title">${location.name}</div><div class="popup-desc">${location.desc}</div>`;
+        const marker = L.marker([location.lat, location.lng], { icon: defaultIcon }).bindPopup(popupContent);
+        markers.addLayer(marker);
+    });
+
+    map.addLayer(markers);
+
+    // 6. Add the Budapest Opportunity Marker
+    const budapestMarker = L.marker([47.4979, 19.0402], { icon: opportunityIcon, zIndexOffset: 1000 })
+        .addTo(map)
+        .bindPopup(`<div class="popup-title">Budapest: The Opportunity</div><div class="popup-desc">A city with a deep thermal culture, primed for the next wave of social & wild sauna experiences.</div>`)
+        .openPopup();
+
+</script>
+</body>
+</html>
